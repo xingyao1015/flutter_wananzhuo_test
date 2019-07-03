@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_wanandroid_test/resources/resources.dart';
 
 import 'home/home_page.dart';
 import 'news/news_page.dart';
@@ -32,12 +34,21 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: 375, height: 667)..init(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("玩安卓"),
         centerTitle: true,
+        leading: Builder(builder: (BuildContext context){
+          return IconButton(icon: Icon(Icons.pages), onPressed: (){
+            Scaffold.of(context).openDrawer();
+          });
+        }),
       ),
-      body: currentPage,
+      body: IndexedStack(
+        index: currentIndex,
+        children: pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: tabs,
         onTap: (index) {
@@ -47,14 +58,25 @@ class _IndexPageState extends State<IndexPage> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.teal,
-        unselectedItemColor: Colors.black26,
         currentIndex: currentIndex,
       ),
-    );
-
-    return Container(
-      child: Text("这是首页"),
+      drawer: Drawer(
+        child: LeftDrawer(),
+      ),
     );
   }
 }
+
+
+class LeftDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: dp(100),
+      color: Colors.white,
+      height: double.infinity,
+      child: Text("再来一次"),
+    );
+  }
+}
+

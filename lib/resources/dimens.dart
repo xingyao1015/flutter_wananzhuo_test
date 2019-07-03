@@ -2,9 +2,9 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
-dp(size) => ScreenUtil.instance.setWidth(size.toDouble());
+dp(double size) => ScreenUtil.instance.setWidth(size);
 
-sp(size) => ScreenUtil.instance.setSp(size.toDouble());
+sp(double size) => ScreenUtil.instance.setSp(size);
 
 
 

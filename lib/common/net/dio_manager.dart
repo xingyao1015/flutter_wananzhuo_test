@@ -4,7 +4,7 @@ import 'package:flutter_wanandroid_test/common/utils/sputil.dart';
 class DioManager {
   static final Dio _dio = Dio();
 
-  static final String _BASE_URL = "https://test.online.qsyuwen.cn/api";
+  static final String _BASE_URL = "https://www.wanandroid.com/";
 
   static final DioManager _manager = DioManager();
 
