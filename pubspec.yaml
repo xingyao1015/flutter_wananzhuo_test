@@ -38,6 +38,9 @@ dependencies:
 
   shared_preferences: ^0.5.3
 
+  rxdart: ^0.22.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
