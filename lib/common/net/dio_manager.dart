@@ -9,11 +9,6 @@ class DioManager {
   static final DioManager _manager = DioManager();
 
   static DioManager instance() {
-    _dio.options.headers = {
-      "XTHK-ONLINE-VERSION": "2.1.2",
-      "APP-NAME": "online_edu_user_app",
-      "Authorization": SpUtil.get(SpUtil.KEY_TOKEN)
-    };
     return _manager;
   }
 

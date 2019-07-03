@@ -21,6 +21,36 @@ class _HomePageState extends State<HomePage> {
         shrinkWrap: true,
         children: <Widget>[
           SwiperDiy(),
+          Container(
+              color: Colors.orangeAccent,
+              alignment: Alignment.centerLeft,
+              height: dp(44),
+              padding: EdgeInsets.only(left: dp(10),right: dp(10)),
+              child: GestureDetector(
+                onTap: (){},
+                child:  Flex(
+                  direction: Axis.horizontal,
+                  children: <Widget>[
+                    Icon(
+                      Icons.filter_none,
+                      color: Colors.white,
+                    ),
+                    Expanded(child: Container(
+                      margin: EdgeInsets.only(left: dp(10)),
+                      child: Text(
+                        "推荐项目",
+                        style: TextStyle(color: Colors.white,fontSize: sp(14)),
+                      ),
+                    )),
+                    Text('更多',style: TextStyle(
+                        fontSize: sp(10),
+                      color: Colors.white
+                    ),),
+                    Icon(Icons.navigate_next,color: Colors.white,)
+
+                  ],
+                )
+              )),
           RecommendList(),
         ],
       ),
