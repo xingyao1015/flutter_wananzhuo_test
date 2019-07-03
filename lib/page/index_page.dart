@@ -32,6 +32,27 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("玩安卓"),
+        centerTitle: true,
+      ),
+      body: currentPage,
+      bottomNavigationBar: BottomNavigationBar(
+        items: tabs,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+            currentPage = pages[index];
+          });
+        },
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.teal,
+        unselectedItemColor: Colors.black26,
+        currentIndex: currentIndex,
+      ),
+    );
+
     return Container(
       child: Text("这是首页"),
     );
