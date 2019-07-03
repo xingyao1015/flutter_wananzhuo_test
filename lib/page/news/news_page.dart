@@ -39,6 +39,7 @@ class _NewsPageState extends State<NewsPage> {
             data.data.datas == null ||
             data.data.datas.isEmpty;
         if (requestPage == 1) {
+          newses.clear();
           isEmpty = empty;
         }
         if (!empty) {
@@ -52,7 +53,7 @@ class _NewsPageState extends State<NewsPage> {
   Widget _initItems() {
     List<Widget> items = newses.map((news) {
       return Container(
-        height: dp(110),
+        height: dp(100),
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.only(left:dp(10),right: dp(10)),
         decoration: new BoxDecoration(
