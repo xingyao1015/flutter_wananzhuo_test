@@ -3,7 +3,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_wanandroid_test/common/net/home_api.dart';
 import 'package:flutter_wanandroid_test/common/entity/banner_entity.dart';
-import 'package:flutter_wanandroid_test/common/entity/recommond_entity.dart';
+import 'package:flutter_wanandroid_test/common/entity/project_entity.dart';
 import 'package:flutter_wanandroid_test/resources/resources.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -130,7 +130,7 @@ class _RecommendListState extends State<RecommendList> {
     );
   }
 
-  Widget _initItems(RecommondEntity recommond) {
+  Widget _initItems(ProjectEntity recommond) {
     List<Widget> items = recommond.data.datas.map((data) {
       return Container(
         width: double.infinity,

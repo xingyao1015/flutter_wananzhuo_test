@@ -1,12 +1,12 @@
-class RecommondEntity {
-	RecommondData data;
+class ProjectEntity {
+	ProjectData data;
 	int errorCode;
 	String errorMsg;
 
-	RecommondEntity({this.data, this.errorCode, this.errorMsg});
+	ProjectEntity({this.data, this.errorCode, this.errorMsg});
 
-	RecommondEntity.fromJson(Map<String, dynamic> json) {
-		data = json['data'] != null ? new RecommondData.fromJson(json['data']) : null;
+	ProjectEntity.fromJson(Map<String, dynamic> json) {
+		data = json['data'] != null ? new ProjectData.fromJson(json['data']) : null;
 		errorCode = json['errorCode'];
 		errorMsg = json['errorMsg'];
 	}
@@ -22,18 +22,18 @@ class RecommondEntity {
 	}
 }
 
-class RecommondData {
+class ProjectData {
 	bool over;
 	int pageCount;
 	int total;
 	int curPage;
 	int offset;
 	int size;
-	List<RecommondDataData> datas;
+	List<ProjectDataData> datas;
 
-	RecommondData({this.over, this.pageCount, this.total, this.curPage, this.offset, this.size, this.datas});
+	ProjectData({this.over, this.pageCount, this.total, this.curPage, this.offset, this.size, this.datas});
 
-	RecommondData.fromJson(Map<String, dynamic> json) {
+	ProjectData.fromJson(Map<String, dynamic> json) {
 		over = json['over'];
 		pageCount = json['pageCount'];
 		total = json['total'];
@@ -41,7 +41,7 @@ class RecommondData {
 		offset = json['offset'];
 		size = json['size'];
 		if (json['datas'] != null) {
-			datas = new List<RecommondDataData>();(json['datas'] as List).forEach((v) { datas.add(new RecommondDataData.fromJson(v)); });
+			datas = new List<ProjectDataData>();(json['datas'] as List).forEach((v) { datas.add(new ProjectDataData.fromJson(v)); });
 		}
 	}
 
@@ -60,7 +60,7 @@ class RecommondData {
 	}
 }
 
-class RecommondDataData {
+class ProjectDataData {
 	String superChapterName;
 	int publishTime;
 	int visible;
@@ -86,9 +86,9 @@ class RecommondDataData {
 	int courseId;
 	String desc;
 
-	RecommondDataData({this.superChapterName, this.publishTime, this.visible, this.niceDate, this.projectLink, this.author, this.prefix, this.zan, this.origin, this.chapterName, this.link, this.title, this.type, this.userId, this.tags, this.apkLink, this.envelopePic, this.chapterId, this.superChapterId, this.id, this.fresh, this.collect, this.courseId, this.desc});
+	ProjectDataData({this.superChapterName, this.publishTime, this.visible, this.niceDate, this.projectLink, this.author, this.prefix, this.zan, this.origin, this.chapterName, this.link, this.title, this.type, this.userId, this.tags, this.apkLink, this.envelopePic, this.chapterId, this.superChapterId, this.id, this.fresh, this.collect, this.courseId, this.desc});
 
-	RecommondDataData.fromJson(Map<String, dynamic> json) {
+	ProjectDataData.fromJson(Map<String, dynamic> json) {
 		superChapterName = json['superChapterName'];
 		publishTime = json['publishTime'];
 		visible = json['visible'];

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'dio_manager.dart';
 import '../entity/banner_entity.dart';
-import '../entity/recommond_entity.dart';
+import '../entity/project_entity.dart';
 
 
 class HomeApi{
@@ -23,11 +23,11 @@ class HomeApi{
     }
   }
 
-  static Future<RecommondEntity> getRecommond() async {
+  static Future<ProjectEntity> getRecommond() async {
     try {
       Response response = await DioManager.instance().get(_homeApi[HomeApiKey.RECOMMOND]);
       print(response.data);
-      return RecommondEntity.fromJson(response.data);
+      return ProjectEntity.fromJson(response.data);
     } catch (e) {
       print(e);
       return e;
