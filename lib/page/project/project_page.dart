@@ -5,7 +5,6 @@ import 'package:flutter_wanandroid_test/common/net/dio_manager.dart';
 import 'package:flutter_wanandroid_test/common/net/project_api.dart';
 import 'package:flutter_wanandroid_test/resources/resources.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_wanandroid_test/common/customWidget/custom_tabbarview.dart';
 
 class ProjectPage extends StatefulWidget {
   @override
@@ -72,11 +71,9 @@ class _TabLayoutDiyState extends State<TabLayoutDiy>
         ),
         backgroundColor: Colors.white,
       ),
-      body: CustomTabBarView(
+      body: TabBarView(
         children: _initTabViews(),
         controller: _tabController,
-        keepStateNum: 3,
-        index: selectIndex,
       ),
     );
   }
@@ -116,7 +113,7 @@ class ProjectChild extends StatefulWidget {
   _ProjectChildState createState() => _ProjectChildState();
 }
 
-class _ProjectChildState extends State<ProjectChild> {
+class _ProjectChildState extends State<ProjectChild> with AutomaticKeepAliveClientMixin{
   int requestPage = 1;
   List<ProjectDataData> datas = [];
   bool isEmpty = false;
@@ -229,4 +226,8 @@ class _ProjectChildState extends State<ProjectChild> {
       shrinkWrap: true,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
+
 }
