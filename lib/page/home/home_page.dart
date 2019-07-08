@@ -123,7 +123,7 @@ class _RecommendListState extends State<RecommendList> {
       builder: (context, data) {
         if (data.hasData) {
           return Container(
-            child: _initItems(data.data, context),
+            child: _initItems(data.data),
           );
         } else {
           return Container(
@@ -135,7 +135,7 @@ class _RecommendListState extends State<RecommendList> {
     );
   }
 
-  Widget _initItems(ProjectEntity recommond, BuildContext context) {
+  Widget _initItems(ProjectEntity recommond) {
     List<Widget> items = recommond.data.datas.map((data) {
       return InkWell(
         onTap: () {
