@@ -14,7 +14,7 @@ class HomeApi{
 
   static Future<BannerEntity> getBanner() async {
     try {
-      Response response = await DioManager().get(_homeApi[HomeApiKey.BANNER]);
+      Response response = await DioManager.instance().get(_homeApi[HomeApiKey.BANNER]);
       print(response.data);
       return BannerEntity.fromJson(response.data);
     } catch (e) {
@@ -25,7 +25,7 @@ class HomeApi{
 
   static Future<ProjectEntity> getRecommond() async {
     try {
-      Response response = await DioManager().get(_homeApi[HomeApiKey.RECOMMOND]);
+      Response response = await DioManager.instance().get(_homeApi[HomeApiKey.RECOMMOND]);
       print(response.data);
       return ProjectEntity.fromJson(response.data);
     } catch (e) {

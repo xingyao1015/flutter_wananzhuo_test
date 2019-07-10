@@ -7,6 +7,8 @@ import 'news/news_page.dart';
 import 'project/project_page.dart';
 import 'system/system_page.dart';
 
+import 'package:flutter_wanandroid_test/common/event/eventbus.dart';
+
 class IndexPage extends StatefulWidget {
   @override
   _IndexPageState createState() => _IndexPageState();
@@ -39,10 +41,12 @@ class _IndexPageState extends State<IndexPage> {
       appBar: AppBar(
         title: Text("玩安卓"),
         centerTitle: true,
-        leading: Builder(builder: (BuildContext context){
-          return IconButton(icon: Icon(Icons.pages), onPressed: (){
-            Scaffold.of(context).openDrawer();
-          });
+        leading: Builder(builder: (BuildContext context) {
+          return IconButton(
+              icon: Icon(Icons.pages),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              });
         }),
       ),
       body: IndexedStack(
@@ -67,16 +71,123 @@ class _IndexPageState extends State<IndexPage> {
   }
 }
 
-
-class LeftDrawer extends StatelessWidget {
+class LeftDrawer extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: dp(100),
-      color: Colors.white,
-      height: double.infinity,
-      child: Text("再来一次"),
-    );
-  }
+  _LeftDrawerState createState() => _LeftDrawerState();
 }
 
+class _LeftDrawerState extends State<LeftDrawer> {
+  bool isLogin = false;
+  String username = "点击登录";
+
+  @override
+  void initState() {
+    bus.on(Event.LOGIN, (arg) {
+      setState(() {
+        isLogin = true;
+        username = arg.username;
+      });
+    });
+    bus.on(Event.LOGOUT, (arg) {
+      setState(() {
+        isLogin = false;
+        username = "点击登录";
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    bus.off(Event.LOGIN);
+    bus.off(Event.LOGOUT);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        top: true,
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(top: dp(20)),
+              child: ClipOval(
+                child: Image.asset(
+                  "image/protrait.png",
+                  width: dp(80),
+                  height: dp(80),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            InkWell(
+              child: Container(
+                margin: EdgeInsets.only(top: dp(10)),
+                child: Text(
+                  username,
+                  style: TextStyle(color: Colors.black45, fontSize: sp(16)),
+                ),
+              ),
+            ),
+            Container(
+              height: dp(30),
+              width: double.infinity,
+              color: Colors.orangeAccent[100],
+              alignment: Alignment.center,
+              child: Text(
+                "玩安卓",
+                style: TextStyle(color: Colors.white, fontSize: sp(12)),
+              ),
+            ),
+            _initItem("收藏", Icons.camera),
+            _initItem("TODO", Icons.description),
+            _initItem("注销", Icons.power_settings_new),
+          ],
+        ));
+  }
+
+  Widget _initItem(String title, IconData icon) {
+    return InkWell(
+      onTap: () {
+        _clickEvent(title);
+      },
+      child: Container(
+        margin: EdgeInsets.all(dp(15)),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              icon,
+              color: Colors.black38,
+            ),
+            Container(
+              margin: EdgeInsets.only(left: dp(20)),
+              child: Text(
+                title,
+                style: TextStyle(fontSize: sp(12), color: Colors.black38),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _clickEvent(String title) {
+    if (isLogin) {
+      switch (title) {
+        case '收藏':
+          print("收藏");
+          break;
+        case 'TODO':
+          print("TODO");
+          break;
+        case '注销':
+          print('注销');
+          break;
+      }
+    } else {
+      print("登录");
+    }
+  }
+}

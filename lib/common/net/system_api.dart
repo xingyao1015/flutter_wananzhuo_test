@@ -13,7 +13,7 @@ class SystemApi {
   static Future<SystemEntity> getSystemTree() async {
     try {
       Response response =
-          await DioManager().get(_api[SystemApiKey.SYSTEM_TREE]);
+          await DioManager.instance().get(_api[SystemApiKey.SYSTEM_TREE]);
       return SystemEntity.fromJson(response.data);
     } catch (e) {
       print(e);
@@ -23,7 +23,7 @@ class SystemApi {
 
   static Future<SystemListEntity> getNewsList(int cid, int page) async {
     try {
-      Response response = await DioManager()
+      Response response = await DioManager.instance()
           .get("${_api[SystemApiKey.SYSTEM_LIST]}/$page/json?cid=$cid");
       print(response.data);
       return SystemListEntity.fromJson(response.data);
