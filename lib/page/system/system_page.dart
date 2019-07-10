@@ -3,6 +3,7 @@ import 'package:flutter_wanandroid_test/common/entity/system_entity.dart';
 import 'package:flutter_wanandroid_test/common/net/system_api.dart';
 import 'package:flutter_wanandroid_test/resources/dimens.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_wanandroid_test/common/utils/navigatorUtils.dart';
 
 class SystemPage extends StatefulWidget {
   @override
@@ -44,9 +45,9 @@ class _SystemPageState extends State<SystemPage> {
       ),
       onRefresh: () {
         return SystemApi.getSystemTree().then((system) {
-            setState(() {
-              _initItem(system);
-            });
+          setState(() {
+            _initItem(system);
+          });
         });
       },
     );
@@ -94,13 +95,13 @@ class _SystemTreeItemState extends State<SystemTreeItem> {
 
   Widget _initItems() {
     List<Widget> items = widget.systemData.children.map((data) {
-
       return InkWell(
-        onTap: (){
-          print(data.toJson());
+        onTap: () {
+          NavigatorUtils.toProjectChild(data.id, data.name, context);
         },
         child: Container(
-          padding: EdgeInsets.only(top:dp(5),bottom: dp(5),left: dp(10),right: dp(10)),
+          padding: EdgeInsets.only(
+              top: dp(5), bottom: dp(5), left: dp(10), right: dp(10)),
           margin: EdgeInsets.only(bottom: dp(5), right: dp(5)),
           decoration: BoxDecoration(
               color: _getColor(data.id),

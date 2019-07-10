@@ -11,7 +11,7 @@ class ProjectApi {
 
   static Future<ProjectEntity> getNewsList(int cid, int page) async {
     try {
-      Response response = await DioManager.instance()
+      Response response = await DioManager()
           .get("${_api[ProjectApiKey.PROJECT_LIST]}/$page/json?cid=$cid");
       return ProjectEntity.fromJson(response.data);
     } catch (e) {
@@ -23,7 +23,7 @@ class ProjectApi {
   static Future<ProjectTreeEntity> getProjectTree() async {
     try {
       Response response =
-          await DioManager.instance().get(_api[ProjectApiKey.PROJECT_TREE]);
+          await DioManager().get(_api[ProjectApiKey.PROJECT_TREE]);
       return ProjectTreeEntity.fromJson(response.data);
     } catch (e) {
       print(e);

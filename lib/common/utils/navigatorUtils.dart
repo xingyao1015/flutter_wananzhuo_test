@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wanandroid_test/page/web/webview_page.dart';
+import 'package:flutter_wanandroid_test/page/system/system_list_page.dart';
 
 class NavigatorUtils {
   static void toWeb(String url, String title, BuildContext context) {
@@ -11,5 +12,16 @@ class NavigatorUtils {
                   title: title,
                   url: url,
                 )));
+  }
+
+
+  static void toProjectChild(int id, String title, BuildContext context){
+    Navigator.push(
+        context,
+        CupertinoPageRoute<void>(
+            builder: (ctx) => SystemListPage(
+              title: title,
+              id: id,
+            )));
   }
 }

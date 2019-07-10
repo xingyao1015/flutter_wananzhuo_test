@@ -6,9 +6,11 @@ class DioManager {
 
   static final String _BASE_URL = "https://www.wanandroid.com/";
 
-  static final DioManager _manager = DioManager();
+  static final DioManager _manager = DioManager._internal();
 
-  static DioManager instance() {
+  DioManager._internal();
+
+  factory DioManager(){
     return _manager;
   }
 

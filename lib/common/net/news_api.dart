@@ -11,7 +11,7 @@ class NewsApi {
     try {
 
       Response response =
-          await DioManager.instance().get("${_newsApi[NewsApiKey.ARTICALE_LIST]}/$page/json");
+          await DioManager().get("${_newsApi[NewsApiKey.ARTICALE_LIST]}/$page/json");
       print(response.data);
       return NewsEntity.fromJson(response.data);
     } catch (e) {
