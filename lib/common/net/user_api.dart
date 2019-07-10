@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'dio_manager.dart';
 
 class UserApi {
+
   static Future login(String userName, String password) async {
     try {
       var data = {'username': userName, 'password': password};

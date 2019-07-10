@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_wanandroid_test/common/utils/sputil.dart';
 import 'package:flutter_wanandroid_test/resources/resources.dart';
 
 import 'home/home_page.dart';
@@ -8,6 +9,8 @@ import 'project/project_page.dart';
 import 'system/system_page.dart';
 
 import 'package:flutter_wanandroid_test/common/event/eventbus.dart';
+import 'package:flutter_wanandroid_test/common/net/user_api.dart';
+import 'package:flutter_wanandroid_test/common/utils/navigatorUtils.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -82,10 +85,22 @@ class _LeftDrawerState extends State<LeftDrawer> {
 
   @override
   void initState() {
+    SpUtil.getBool(SpUtil.KEY_ISLOGIN).then((isT) {
+      setState(() {
+        isLogin = isT;
+      });
+      if (isT) {
+        SpUtil.get(SpUtil.KEY_USERNAME).then((data) {
+          setState(() {
+            username = data;
+          });
+        });
+      }
+    });
     bus.on(Event.LOGIN, (arg) {
       setState(() {
         isLogin = true;
-        username = arg.username;
+        username = arg['data']['nickname'];
       });
     });
     bus.on(Event.LOGOUT, (arg) {
@@ -123,7 +138,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
             ),
             InkWell(
               child: Container(
-                margin: EdgeInsets.only(top: dp(10)),
+                padding: EdgeInsets.only(top: dp(10), bottom: dp(10)),
                 child: Text(
                   username,
                   style: TextStyle(color: Colors.black45, fontSize: sp(16)),
@@ -183,11 +198,94 @@ class _LeftDrawerState extends State<LeftDrawer> {
           print("TODO");
           break;
         case '注销':
-          print('注销');
+          _showLogoutDialog();
           break;
       }
     } else {
+      NavigatorUtils.toLogin(context);
       print("登录");
     }
+  }
+
+  void _showLogoutDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+              width: dp(280),
+              height: dp(120),
+              padding: EdgeInsets.all(dp(20)),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    "确认退出登录吗？",
+                    style: TextStyle(fontSize: sp(12), color: Colors.black87),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: dp(40)),
+                    child: Flex(
+                      direction: Axis.horizontal,
+                      children: <Widget>[
+                        Expanded(child: Container()),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                              width: dp(80),
+                              height: dp(20),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(dp(2))),
+                                  color: Colors.white,
+                                  shape: BoxShape.rectangle,
+                                  border: Border.all(
+                                      color: Colors.orange, width: 1)),
+                              child: Text(
+                                "取消",
+                                style: TextStyle(
+                                    color: Colors.orange, fontSize: sp(14)),
+                              )),
+                        ),
+                        Expanded(child: Container()),
+                        InkWell(
+                          onTap: () {
+                            UserApi.logout().then((data) {
+                              Navigator.pop(context);
+                              SpUtil.remove(SpUtil.KEY_ISLOGIN);
+                              bus.emit(Event.LOGOUT, false);
+                            });
+                          },
+                          child: Container(
+                              width: dp(80),
+                              height: dp(20),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(dp(2))),
+                                color: Colors.orange,
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Text(
+                                "确定",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: sp(14)),
+                              )),
+                        ),
+                        Expanded(child: Container()),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(dp(4)))),
+            ),
+          );
+        });
   }
 }

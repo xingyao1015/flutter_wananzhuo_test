@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_wanandroid_test/page/user/login_page.dart';
 import 'package:flutter_wanandroid_test/page/web/webview_page.dart';
 import 'package:flutter_wanandroid_test/page/system/system_list_page.dart';
 
@@ -14,14 +15,18 @@ class NavigatorUtils {
                 )));
   }
 
-
-  static void toProjectChild(int id, String title, BuildContext context){
+  static void toProjectChild(int id, String title, BuildContext context) {
     Navigator.push(
         context,
         CupertinoPageRoute<void>(
             builder: (ctx) => SystemListPage(
-              title: title,
-              id: id,
-            )));
+                  title: title,
+                  id: id,
+                )));
+  }
+
+  static void toLogin(BuildContext context) {
+    Navigator.push(
+        context, CupertinoPageRoute<void>(builder: (ctx) => LoginPage()));
   }
 }
