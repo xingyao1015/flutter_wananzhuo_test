@@ -40,15 +40,31 @@ class _IndexPageState extends State<IndexPage> {
     ScreenUtil.instance = ScreenUtil(width: 375, height: 667)..init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("玩安卓"),
+        title: Text(
+          "玩安卓",
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         leading: Builder(builder: (BuildContext context) {
           return IconButton(
-              icon: Icon(Icons.pages),
+              icon: Icon(
+                Icons.pages,
+                color: Colors.white,
+              ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               });
         }),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                  NavigatorUtils.toSearch(context);
+              })
+        ],
       ),
       body: IndexedStack(
         index: currentIndex,
