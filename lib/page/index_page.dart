@@ -62,7 +62,7 @@ class _IndexPageState extends State<IndexPage> {
                 color: Colors.white,
               ),
               onPressed: () {
-                  NavigatorUtils.toSearch(context);
+                NavigatorUtils.toSearch(context);
               })
         ],
       ),
@@ -207,7 +207,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
       switch (title) {
         case '收藏':
           print("收藏");
-          SnakeUtil.show(context, "收藏");
+          NavigatorUtils.toFavorite(context);
           break;
         case 'TODO':
           SnakeUtil.show(context, "TODO");
