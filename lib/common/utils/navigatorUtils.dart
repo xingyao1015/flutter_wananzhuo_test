@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wanandroid_test/page/user/login_page.dart';
+import 'package:flutter_wanandroid_test/page/user/register_page.dart';
 import 'package:flutter_wanandroid_test/page/web/webview_page.dart';
 import 'package:flutter_wanandroid_test/page/system/system_list_page.dart';
 
@@ -29,4 +30,11 @@ class NavigatorUtils {
     Navigator.push(
         context, CupertinoPageRoute<void>(builder: (ctx) => LoginPage()));
   }
+
+  static void toRegister(BuildContext context) {
+    Navigator.push(
+        context, CupertinoPageRoute<void>(builder: (ctx) => RegisterPage()));
+  }
+
+
 }

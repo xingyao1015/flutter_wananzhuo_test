@@ -1,39 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_wanandroid_test/common/event/eventbus.dart';
 import 'package:flutter_wanandroid_test/common/utils.dart';
 import 'package:flutter_wanandroid_test/customWidget/CustomAppBar.dart';
 import 'package:flutter_wanandroid_test/resources/resources.dart';
 import 'package:flutter_wanandroid_test/common/net/user_api.dart';
-import 'package:flutter_wanandroid_test/common/event/eventbus.dart';
-import 'package:flutter_wanandroid_test/common/utils/sputil.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   bool isShowPassword = true;
+  bool isShowRePassword = true;
   TextEditingController _usernameController = TextEditingController();
+  TextEditingController _rePasswordController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    SpUtil.get(SpUtil.KEY_USERNAME).then((data) {
-      _usernameController.text = data ?? "";
-    });
-    bus.on(Event.LOGIN, (arg) {
-      setState(() {
-        Navigator.pop(context);
-      });
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar.customAppBar(context, "登录"),
+      appBar: CustomAppBar.customAppBar(context, "注册"),
       body: Column(
         children: <Widget>[
           Container(
@@ -132,89 +120,90 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Container(
             width: double.infinity,
-            alignment: Alignment.topRight,
-            margin: EdgeInsets.only(right: dp(15), top: dp(5)),
-            child: InkWell(
-              onTap: () {
-                print("忘记密码");
-              },
-              child: Text(
-                "忘记密码？",
-                style: TextStyle(fontSize: sp(12), color: Colors.black45),
-              ),
-            ),
-          ),
-
-          Container(
-            width: double.infinity,
-            height: dp(40),
-            margin: EdgeInsets.only(top: dp(10), left: dp(15), right: dp(15)),
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: Colors.orange,
-              borderRadius: BorderRadius.all(Radius.circular(dp(20))),
-            ),
-            child: InkWell(
-              onTap: _login,
-              borderRadius: BorderRadius.all(Radius.circular(dp(20))),
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "登录",
-                  style: TextStyle(color: Colors.white, fontSize: sp(16)),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: dp(15)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            alignment: Alignment.topCenter,
+            margin: EdgeInsets.only(left: dp(15), right: dp(15), top: dp(10)),
+            child: Flex(
+              direction: Axis.horizontal,
               children: <Widget>[
-                Text(
-                  "新用户？",
-                  style: TextStyle(fontSize: sp(12), color: Colors.black54),
+                Icon(
+                  Icons.lock,
+                  color: Colors.orange,
                 ),
-                InkWell(
-                  onTap: () {
-                    NavigatorUtils.toRegister(context);
-                  },
-                  child: Text(
-                    "点击注册",
-                    style: TextStyle(color: Colors.orange, fontSize: sp(12)),
+                Expanded(
+                    child: Container(
+                  margin: EdgeInsets.only(left: dp(15)),
+                  child: TextField(
+                    controller: _rePasswordController,
+                    keyboardType: TextInputType.text,
+                    obscureText: isShowRePassword,
+                    maxLines: 1,
+                    maxLength: 20,
+                    enabled: true,
+                    maxLengthEnforced: true,
+                    decoration: InputDecoration(
+                      hintText: "请输入确认密码",
+                      hintStyle: TextStyle(color: Colors.black38),
+                      suffixIcon: IconButton(
+                          icon: Icon(
+                            isShowRePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.orange,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isShowRePassword = !isShowRePassword;
+                            });
+                          }),
+                      counter: Container(
+                        width: 0.0,
+                        height: 0.0,
+                      ),
+                    ),
+                    style: TextStyle(color: Colors.black87, fontSize: sp(12)),
                   ),
-                )
+                ))
               ],
             ),
-          )
+          ),
+          InkWell(
+            onTap: _register,
+            child: Container(
+              width: double.infinity,
+              height: dp(40),
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: dp(10), left: dp(15), right: dp(15)),
+              child: Text(
+                "注册",
+                style: TextStyle(color: Colors.white, fontSize: sp(16)),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.all(Radius.circular(dp(20))),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  void _login() {
-    if (_usernameController.text == null || _usernameController.text.isEmpty) {
-      print("username为空");
-      return;
-    }
-
-    if (_passwordController.text == null || _passwordController.text.isEmpty) {
-      print("password为空");
-      return;
-    }
-
-    UserApi.login(_usernameController.text, _passwordController.text)
+  void _register() {
+    UserApi.register(_usernameController.text, _passwordController.text,
+            _rePasswordController.text)
         .then((data) {
       SpUtil.add(SpUtil.KEY_USERNAME, _usernameController.text);
       SpUtil.add(SpUtil.KEY_ISLOGIN, true);
       bus.emit(Event.LOGIN, data);
+      Navigator.pop(context);
     });
   }
 
   @override
   void dispose() {
     _passwordController.dispose();
+    _rePasswordController.dispose();
     _usernameController.dispose();
     super.dispose();
   }

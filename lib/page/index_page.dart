@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_wanandroid_test/common/utils/sputil.dart';
 import 'package:flutter_wanandroid_test/resources/resources.dart';
 
 import 'home/home_page.dart';
@@ -10,7 +8,7 @@ import 'system/system_page.dart';
 
 import 'package:flutter_wanandroid_test/common/event/eventbus.dart';
 import 'package:flutter_wanandroid_test/common/net/user_api.dart';
-import 'package:flutter_wanandroid_test/common/utils/navigatorUtils.dart';
+import 'package:flutter_wanandroid_test/common/utils.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -87,7 +85,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
   void initState() {
     SpUtil.getBool(SpUtil.KEY_ISLOGIN).then((isT) {
       setState(() {
-        isLogin = isT;
+        isLogin = isT ?? false;
       });
       if (isT) {
         SpUtil.get(SpUtil.KEY_USERNAME).then((data) {
@@ -193,9 +191,10 @@ class _LeftDrawerState extends State<LeftDrawer> {
       switch (title) {
         case '收藏':
           print("收藏");
+          SnakeUtil.show(context, "收藏");
           break;
         case 'TODO':
-          print("TODO");
+          SnakeUtil.show(context, "TODO");
           break;
         case '注销':
           _showLogoutDialog();
