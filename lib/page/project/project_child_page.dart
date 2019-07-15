@@ -5,7 +5,6 @@ import 'package:flutter_wanandroid_test/common/net/project_api.dart';
 import 'package:flutter_wanandroid_test/common/utils/navigatorUtils.dart';
 import 'package:flutter_wanandroid_test/resources/resources.dart';
 
-
 class ProjectChild extends StatefulWidget {
   final int id;
 
@@ -15,26 +14,55 @@ class ProjectChild extends StatefulWidget {
   _ProjectChildState createState() => _ProjectChildState();
 }
 
-class _ProjectChildState extends State<ProjectChild> with AutomaticKeepAliveClientMixin{
+class _ProjectChildState extends State<ProjectChild>
+    with AutomaticKeepAliveClientMixin {
   int requestPage = 0;
   List<ProjectDataData> datas = [];
   bool isEmpty = false;
+  ScrollController _controller = ScrollController();
+  bool isShowToTopBtn = false;
+
+  @override
+  void initState() {
+    _controller.addListener(() {
+      setState(() {
+        print(_controller.offset);
+        isShowToTopBtn = _controller.offset > 500;
+      });
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return EasyRefresh(
-      child: _initItem(),
-      loadMore: () {
-        requestPage++;
-        _getProjects();
-        return null;
-      },
-      onRefresh: () {
-        requestPage = 0;
-        _getProjects();
-        return null;
-      },
-      firstRefresh: true,
+    return Scaffold(
+      body: EasyRefresh(
+        child: _initItem(),
+        loadMore: () {
+          requestPage++;
+          _getProjects();
+          return null;
+        },
+        onRefresh: () {
+          requestPage = 0;
+          _getProjects();
+          return null;
+        },
+        firstRefresh: true,
+      ),
+      floatingActionButton: isShowToTopBtn
+          ? FloatingActionButton(
+              onPressed: () {
+                _controller.animateTo(0.0,
+                    duration: Duration(microseconds: 1000), curve: Curves.linear);
+              },
+              child: Icon(
+                Icons.arrow_upward,
+                color: Colors.white,
+              ),
+            )
+          : null,
     );
   }
 
@@ -59,7 +87,7 @@ class _ProjectChildState extends State<ProjectChild> with AutomaticKeepAliveClie
   Widget _initItem() {
     List<Widget> items = datas.map((data) {
       return InkWell(
-        onTap: (){
+        onTap: () {
           NavigatorUtils.toWeb(data.link, data.title, context);
         },
         child: Container(
@@ -75,47 +103,48 @@ class _ProjectChildState extends State<ProjectChild> with AutomaticKeepAliveClie
             children: <Widget>[
               Expanded(
                   child: Flex(
-                    direction: Axis.vertical,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        data.title,
-                        style: TextStyle(fontSize: sp(14), color: Colors.black87),
+                direction: Axis.vertical,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    data.title,
+                    style: TextStyle(fontSize: sp(14), color: Colors.black87),
+                  ),
+                  Expanded(
+                      child: Container(
+                    margin: EdgeInsets.only(top: dp(10), right: dp(10)),
+                    child: Text(
+                      data.desc,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 5,
+                      softWrap: true,
+                      style: TextStyle(
+                        fontSize: sp(12),
+                        color: Colors.black54,
                       ),
-                      Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(top: dp(10), right: dp(10)),
-                            child: Text(
-                              data.desc,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 5,
-                              softWrap: true,
-                              style: TextStyle(
-                                fontSize: sp(12),
-                                color: Colors.black54,
-                              ),
-                            ),
-                          )),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.favorite_border),
-                          Container(
-                            margin: EdgeInsets.only(left: dp(10), right: dp(10)),
-                            child: Text(
-                              data.author,
-                              style:
+                    ),
+                  )),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.favorite_border),
+                      Container(
+                        margin: EdgeInsets.only(left: dp(10), right: dp(10)),
+                        child: Text(
+                          data.author,
+                          style:
                               TextStyle(fontSize: sp(8), color: Colors.black45),
-                            ),
-                          ),
-                          Text(
-                            data.niceDate,
-                            style: TextStyle(fontSize: sp(8), color: Colors.black45),
-                          )
-                        ],
+                        ),
+                      ),
+                      Text(
+                        data.niceDate,
+                        style:
+                            TextStyle(fontSize: sp(8), color: Colors.black45),
                       )
                     ],
-                  )),
+                  )
+                ],
+              )),
               Image.network(
                 data.envelopePic,
                 fit: BoxFit.cover,
@@ -126,16 +155,23 @@ class _ProjectChildState extends State<ProjectChild> with AutomaticKeepAliveClie
           ),
         ),
       );
-
     }).toList();
 
     return ListView(
       children: items,
+      controller: _controller,
       shrinkWrap: true,
     );
   }
 
   @override
-  bool get wantKeepAlive => true;
+  void dispose() {
+    if (_controller != null) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
 
+  @override
+  bool get wantKeepAlive => true;
 }

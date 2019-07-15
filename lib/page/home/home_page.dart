@@ -63,7 +63,8 @@ class _HomePageState extends State<HomePage> {
         setState(() {});
         return null;
       },
-    ));
+    ),
+    );
   }
 }
 
@@ -73,27 +74,38 @@ class SwiperDiy extends StatefulWidget {
 }
 
 class _SwiperDiyState extends State<SwiperDiy> {
+  List<BannerData> datas = [];
+
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      builder: (context, banner) {
-        if (banner.hasData) {
-          return _initSwiper(banner.data);
-        } else {
-          return Center(
-            child: Text("没有数据哦"),
-          );
-        }
-      },
-      future: HomeApi.getBanner(),
-    );
+  void initState() {
+    _getBanner();
+    super.initState();
   }
 
-  Widget _initSwiper(BannerEntity banner) {
+  void _getBanner() {
+    HomeApi.getBanner().then((entity) {
+      setState(() {
+        datas.addAll(entity.data);
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _initSwiper();
+  }
+
+  Widget _initSwiper() {
+    if (datas.isEmpty) {
+      return Container(
+        width: 0.0,
+        height: 0.0,
+      );
+    }
     return Container(
       height: dp(208),
       child: Swiper(
-        itemCount: banner.data.length,
+        itemCount: datas.length,
         autoplay: true,
         itemHeight: dp(208),
         pagination: SwiperPagination(
@@ -102,7 +114,7 @@ class _SwiperDiyState extends State<SwiperDiy> {
         ),
         itemBuilder: (BuildContext context, int index) {
           return Image.network(
-            banner.data[index].imagePath,
+            datas[index].imagePath,
             fit: BoxFit.cover,
           );
         },
@@ -117,26 +129,41 @@ class RecommendList extends StatefulWidget {
 }
 
 class _RecommendListState extends State<RecommendList> {
+  List<ProjectDataData> datas = [];
+
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      builder: (context, data) {
-        if (data.hasData) {
-          return Container(
-            child: _initItems(data.data),
-          );
-        } else {
-          return Container(
-            child: Text("没有数据哦"),
-          );
-        }
-      },
-      future: HomeApi.getRecommond(),
-    );
+  void initState() {
+    _getProjects();
+    super.initState();
   }
 
-  Widget _initItems(ProjectEntity recommond) {
-    List<Widget> items = recommond.data.datas.map((data) {
+  @override
+  Widget build(BuildContext context) {
+    return _initItems();
+  }
+
+  void _getProjects() {
+    HomeApi.getRecommond().then((entity) {
+      setState(() {
+        datas.addAll(entity.data.datas);
+      });
+    });
+  }
+
+  Widget _initItems() {
+    if (datas.isEmpty) {
+      return Container(
+        height: dp(200),
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Text(
+          "没有推荐项目哟",
+          style: TextStyle(fontSize: sp(12)),
+        ),
+      );
+    }
+
+    List<Widget> items = datas.map((data) {
       return InkWell(
         onTap: () {
           NavigatorUtils.toWeb(data.link, data.title, context);
