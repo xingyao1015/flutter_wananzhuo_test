@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'dio_manager.dart';
+import '../utils.dart';
 
 class UserApi {
 
@@ -13,7 +14,9 @@ class UserApi {
 
       response.headers.forEach((String name, List<String> values) {
         if ('set-cookie' == name) {
+          UserManager.isLogin = true;
           DioManager.instance().setCookie(values.toString());
+
         }
       });
 
@@ -52,6 +55,7 @@ class UserApi {
       Response response =
           await DioManager.instance().get(UserApiKey.API_LOGOUT);
       DioManager.instance().removeCookie();
+      UserManager.isLogin = false;
     } catch (e) {
       print(e);
     }

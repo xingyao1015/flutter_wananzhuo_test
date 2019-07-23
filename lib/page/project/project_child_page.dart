@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_wanandroid_test/common/entity/project_entity.dart';
+import 'package:flutter_wanandroid_test/common/event/eventbus.dart';
 import 'package:flutter_wanandroid_test/common/net/project_api.dart';
 import 'package:flutter_wanandroid_test/common/utils/navigatorUtils.dart';
 import 'package:flutter_wanandroid_test/resources/resources.dart';
+import 'package:flutter_wanandroid_test/customWidget/project_item.dart';
 
 class ProjectChild extends StatefulWidget {
   final int id;
@@ -31,6 +33,18 @@ class _ProjectChildState extends State<ProjectChild>
       });
     });
 
+    bus.on(Event.LOGIN, (isLogin) {
+      if (isLogin) {
+        requestPage = 0;
+        _getProjects();
+      }
+    });
+
+    bus.on(Event.LOGOUT, (idfd) {
+      requestPage = 0;
+      _getProjects();
+    });
+
     super.initState();
   }
 
@@ -55,7 +69,8 @@ class _ProjectChildState extends State<ProjectChild>
           ? FloatingActionButton(
               onPressed: () {
                 _controller.animateTo(0.0,
-                    duration: Duration(microseconds: 1000), curve: Curves.linear);
+                    duration: Duration(microseconds: 1000),
+                    curve: Curves.linear);
               },
               child: Icon(
                 Icons.arrow_upward,
@@ -90,69 +105,8 @@ class _ProjectChildState extends State<ProjectChild>
         onTap: () {
           NavigatorUtils.toWeb(data.link, data.title, context);
         },
-        child: Container(
-          width: double.infinity,
-          height: dp(170),
-          padding: EdgeInsets.all(dp(10)),
-          decoration: new BoxDecoration(
-              color: Colors.white,
-              border: new Border(
-                  bottom: new BorderSide(width: 0.33, color: Colors.black26))),
-          child: Flex(
-            direction: Axis.horizontal,
-            children: <Widget>[
-              Expanded(
-                  child: Flex(
-                direction: Axis.vertical,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    data.title,
-                    style: TextStyle(fontSize: sp(14), color: Colors.black87),
-                  ),
-                  Expanded(
-                      child: Container(
-                    margin: EdgeInsets.only(top: dp(10), right: dp(10)),
-                    child: Text(
-                      data.desc,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 5,
-                      softWrap: true,
-                      style: TextStyle(
-                        fontSize: sp(12),
-                        color: Colors.black54,
-                      ),
-                    ),
-                  )),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.favorite_border),
-                      Container(
-                        margin: EdgeInsets.only(left: dp(10), right: dp(10)),
-                        child: Text(
-                          data.author,
-                          style:
-                              TextStyle(fontSize: sp(8), color: Colors.black45),
-                        ),
-                      ),
-                      Text(
-                        data.niceDate,
-                        style:
-                            TextStyle(fontSize: sp(8), color: Colors.black45),
-                      )
-                    ],
-                  )
-                ],
-              )),
-              Image.network(
-                data.envelopePic,
-                fit: BoxFit.cover,
-                width: dp(80),
-                height: dp(150),
-              )
-            ],
-          ),
+        child: ProjectItem(
+          data: data,
         ),
       );
     }).toList();

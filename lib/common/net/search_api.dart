@@ -1,4 +1,4 @@
-import 'package:flutter_wanandroid_test/common/entity/search_data_entity.dart';
+import 'package:flutter_wanandroid_test/common/entity/news_entity.dart';
 
 import '../entity/custom_url_entity.dart';
 import '../entity/hot_key_entity.dart';
@@ -30,13 +30,13 @@ class SearchApi {
     }
   }
 
-  static Future<SearchEntity> search(String words, int page) async {
+  static Future<NewsEntity> search(String words, int page) async {
     try {
       var data = {'k': words};
       Response response = await DioManager.instance()
           .post("${SearchApiKey.API_SEARCH}/$page/json", params: data);
       print(response);
-      return SearchEntity.fromJson(response.data);
+      return NewsEntity.fromJson(response.data);
     } catch (e) {
       print(e);
       return e;

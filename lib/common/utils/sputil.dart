@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SpUtil {
   static const KEY_TOKEN = "KEY_TOKEN";
   static const KEY_USERNAME = "KEY_USERNAME";
-  static const KEY_ISLOGIN = "KEY_ISLOGIN";
+  static const KEY_PASSWORD = "KEY_PASSWORD";
 
   static add(key, value) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();

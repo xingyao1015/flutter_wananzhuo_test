@@ -1,7 +1,7 @@
-import 'package:flutter_wanandroid_test/common/entity/system_list_entity.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_wanandroid_test/common/entity/news_entity.dart';
 
 import '../entity/system_entity.dart';
-import 'package:dio/dio.dart';
 import 'dio_manager.dart';
 
 class SystemApi {
@@ -21,12 +21,12 @@ class SystemApi {
     }
   }
 
-  static Future<SystemListEntity> getNewsList(int cid, int page) async {
+  static Future<NewsEntity> getNewsList(int cid, int page) async {
     try {
       Response response = await DioManager.instance()
           .get("${_api[SystemApiKey.SYSTEM_LIST]}/$page/json?cid=$cid");
       print(response.data);
-      return SystemListEntity.fromJson(response.data);
+      return NewsEntity.fromJson(response.data);
     } catch (e) {
       print(e);
       return e;

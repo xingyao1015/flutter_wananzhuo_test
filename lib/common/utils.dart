@@ -4,3 +4,4 @@ export '../common/utils/screen_utils.dart';
 export '../common/utils/snake_util.dart';
 export '../common/utils/sputil.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
+export 'package:flutter_wanandroid_test/common/utils/usermanager.dart';

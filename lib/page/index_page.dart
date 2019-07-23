@@ -9,6 +9,7 @@ import 'system/system_page.dart';
 import 'package:flutter_wanandroid_test/common/event/eventbus.dart';
 import 'package:flutter_wanandroid_test/common/net/user_api.dart';
 import 'package:flutter_wanandroid_test/common/utils.dart';
+import 'package:rxdart/rxdart.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -94,32 +95,39 @@ class LeftDrawer extends StatefulWidget {
 }
 
 class _LeftDrawerState extends State<LeftDrawer> {
-  bool isLogin = false;
   String username = "点击登录";
 
   @override
   void initState() {
-    SpUtil.getBool(SpUtil.KEY_ISLOGIN).then((isT) {
-      setState(() {
-        isLogin = isT ?? false;
+    if (UserManager.isLogin) {
+      SpUtil.get(SpUtil.KEY_USERNAME).then((data) {
+        setState(() {
+          username = data;
+        });
       });
-      if (isT) {
-        SpUtil.get(SpUtil.KEY_USERNAME).then((data) {
-          setState(() {
-            username = data;
-          });
+    }
+
+    SpUtil.get(SpUtil.KEY_USERNAME).then((name) {
+      if (name != null) {
+        SpUtil.getString(SpUtil.KEY_PASSWORD).then((password) {
+          if (password != null) {
+            _login(name, password);
+          } else {
+            setState(() {
+              username = '点击登录';
+            });
+          }
         });
       }
     });
+
     bus.on(Event.LOGIN, (arg) {
       setState(() {
-        isLogin = true;
         username = arg['data']['nickname'];
       });
     });
     bus.on(Event.LOGOUT, (arg) {
       setState(() {
-        isLogin = false;
         username = "点击登录";
       });
     });
@@ -151,6 +159,11 @@ class _LeftDrawerState extends State<LeftDrawer> {
               ),
             ),
             InkWell(
+              onTap: (){
+                if(!UserManager.isLogin){
+                  NavigatorUtils.toLogin(context);
+                }
+              },
               child: Container(
                 padding: EdgeInsets.only(top: dp(10), bottom: dp(10)),
                 child: Text(
@@ -171,7 +184,12 @@ class _LeftDrawerState extends State<LeftDrawer> {
             ),
             _initItem("收藏", Icons.camera),
             _initItem("TODO", Icons.description),
-            _initItem("注销", Icons.power_settings_new),
+            UserManager.isLogin
+                ? _initItem("注销", Icons.power_settings_new)
+                : Container(
+                    width: 0.0,
+                    height: 0.0,
+                  ),
           ],
         ));
   }
@@ -203,7 +221,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
   }
 
   void _clickEvent(String title) {
-    if (isLogin) {
+    if (UserManager.isLogin) {
       switch (title) {
         case '收藏':
           print("收藏");
@@ -270,7 +288,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
                           onTap: () {
                             UserApi.logout().then((data) {
                               Navigator.pop(context);
-                              SpUtil.remove(SpUtil.KEY_ISLOGIN);
+                              SpUtil.remove(SpUtil.KEY_PASSWORD);
                               bus.emit(Event.LOGOUT, false);
                             });
                           },
@@ -302,5 +320,13 @@ class _LeftDrawerState extends State<LeftDrawer> {
             ),
           );
         });
+  }
+
+  void _login(String username, String password) {
+    UserApi.login(username, password).then((data) {
+      SpUtil.add(SpUtil.KEY_USERNAME, username);
+      SpUtil.add(SpUtil.KEY_PASSWORD, password);
+      bus.emit(Event.LOGIN, data);
+    });
   }
 }

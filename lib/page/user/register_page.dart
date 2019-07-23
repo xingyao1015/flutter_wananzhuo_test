@@ -194,7 +194,6 @@ class _RegisterPageState extends State<RegisterPage> {
             _rePasswordController.text)
         .then((data) {
       SpUtil.add(SpUtil.KEY_USERNAME, _usernameController.text);
-      SpUtil.add(SpUtil.KEY_ISLOGIN, true);
       bus.emit(Event.LOGIN, data);
       Navigator.pop(context);
     });

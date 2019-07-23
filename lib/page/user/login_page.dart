@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
     UserApi.login(_usernameController.text, _passwordController.text)
         .then((data) {
       SpUtil.add(SpUtil.KEY_USERNAME, _usernameController.text);
-      SpUtil.add(SpUtil.KEY_ISLOGIN, true);
+      SpUtil.add(SpUtil.KEY_PASSWORD, _passwordController.text);
       bus.emit(Event.LOGIN, data);
     });
   }
