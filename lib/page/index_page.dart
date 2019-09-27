@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_wanandroid_test/common/event/eventbus.dart';
+import 'package:flutter_wanandroid_test/common/net/user_api.dart';
+import 'package:flutter_wanandroid_test/common/utils.dart';
 import 'package:flutter_wanandroid_test/resources/resources.dart';
 
 import 'home/home_page.dart';
 import 'news/news_page.dart';
 import 'project/project_page.dart';
 import 'system/system_page.dart';
-
-import 'package:flutter_wanandroid_test/common/event/eventbus.dart';
-import 'package:flutter_wanandroid_test/common/net/user_api.dart';
-import 'package:flutter_wanandroid_test/common/utils.dart';
-import 'package:rxdart/rxdart.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -56,6 +54,7 @@ class _IndexPageState extends State<IndexPage> {
                 Scaffold.of(context).openDrawer();
               });
         }),
+        brightness: Brightness.dark,
         actions: <Widget>[
           IconButton(
               icon: Icon(
@@ -64,7 +63,10 @@ class _IndexPageState extends State<IndexPage> {
               ),
               onPressed: () {
                 NavigatorUtils.toSearch(context);
-              })
+              }),
+          IconButton(icon: Icon(Icons.add,color: Colors.white,), onPressed: (){
+            print("点击事件触发");
+          })
         ],
       ),
       body: IndexedStack(

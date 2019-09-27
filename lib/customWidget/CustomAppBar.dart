@@ -8,6 +8,7 @@ class CustomAppBar{
         title,
         style: TextStyle(color: Colors.white,fontSize: sp(16)),
       ),
+      brightness: Brightness.dark,
       leading: InkWell(
         child: Icon(
           Icons.arrow_back_ios,
